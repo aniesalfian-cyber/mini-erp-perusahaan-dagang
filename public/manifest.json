@@ -1,0 +1,23 @@
+{
+    "name": "ERP System Prima Jaya",
+    "short_name": "ERP PrimaJaya",
+    "description": "Sistem ERP Perusahaan Dagang & Distribusi Bahan Bangunan",
+    "start_url": "/dashboard",
+    "display": "standalone",
+    "background_color": "#EAE6DF",
+    "theme_color": "#1E3A2B",
+    "icons": [
+        {
+            "src": "/icons/icon-192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "/icons/icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any maskable"
+        }
+    ]
+}

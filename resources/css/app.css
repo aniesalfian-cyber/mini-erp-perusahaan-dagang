@@ -1,0 +1,114 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
+@import 'leaflet/dist/leaflet.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    body {
+        background-color: #EAE6DF;
+        color: #2C2924;
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-weight: 400;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+}
+
+@layer components {
+    /* Neomorphic Paper Surface Components */
+    .neo-card {
+        background: #EAE6DF;
+        border-radius: 1.25rem;
+        box-shadow: 6px 6px 14px rgba(185, 180, 171, 0.5), -6px -6px 14px rgba(255, 255, 255, 0.95);
+        border: 1px solid rgba(255, 255, 255, 0.5);
+    }
+
+    .neo-card-sm {
+        background: #EAE6DF;
+        border-radius: 0.875rem;
+        box-shadow: 3px 3px 8px rgba(185, 180, 171, 0.45), -3px -3px 8px rgba(255, 255, 255, 0.9);
+        border: 1px solid rgba(255, 255, 255, 0.4);
+    }
+
+    .neo-inset {
+        background: #E5E1DA;
+        box-shadow: inset 3px 3px 6px rgba(185, 180, 171, 0.45), inset -3px -3px 6px rgba(255, 255, 255, 0.85);
+        border-radius: 0.875rem;
+    }
+
+    .neo-input {
+        background: #E5E1DA;
+        box-shadow: inset 2px 2px 5px rgba(185, 180, 171, 0.5), inset -2px -2px 5px rgba(255, 255, 255, 0.85);
+        border: 1px solid rgba(200, 195, 185, 0.4);
+        border-radius: 0.75rem;
+        color: #2C2924;
+        transition: all 0.2s ease;
+    }
+
+    .neo-input:focus {
+        outline: none;
+        border-color: #1E3A2B;
+        box-shadow: inset 2px 2px 5px rgba(185, 180, 171, 0.5), inset -2px -2px 5px rgba(255, 255, 255, 0.85), 0 0 0 2px rgba(30, 58, 43, 0.2);
+    }
+
+    .neo-btn {
+        background: #EAE6DF;
+        box-shadow: 4px 4px 10px rgba(185, 180, 171, 0.5), -4px -4px 10px rgba(255, 255, 255, 0.95);
+        border: 1px solid rgba(255, 255, 255, 0.6);
+        border-radius: 0.75rem;
+        transition: all 0.15s ease;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+    }
+
+    .neo-btn:active, .neo-btn.active {
+        box-shadow: inset 2px 2px 5px rgba(185, 180, 171, 0.6), inset -2px -2px 5px rgba(255, 255, 255, 0.85);
+        transform: translateY(1px);
+    }
+
+    .neo-btn-primary {
+        background: #1E3A2B;
+        color: #FFFFFF;
+        box-shadow: 4px 4px 10px rgba(30, 58, 43, 0.35), -3px -3px 8px rgba(255, 255, 255, 0.8);
+        border-radius: 0.75rem;
+        transition: all 0.15s ease;
+    }
+
+    .neo-btn-primary:active {
+        transform: translateY(1px);
+        box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .neo-btn-terracotta {
+        background: #A85D3B;
+        color: #FFFFFF;
+        box-shadow: 4px 4px 10px rgba(168, 93, 59, 0.35), -3px -3px 8px rgba(255, 255, 255, 0.8);
+        border-radius: 0.75rem;
+        transition: all 0.15s ease;
+    }
+
+    .neo-btn-terracotta:active {
+        transform: translateY(1px);
+        box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.3);
+    }
+}
+
+/* Custom scrollbar for desktop & mobile */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+::-webkit-scrollbar-track {
+    background: #EAE6DF;
+}
+::-webkit-scrollbar-thumb {
+    background: #C7C0B3;
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #9E9789;
+}
