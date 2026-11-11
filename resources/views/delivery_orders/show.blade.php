@@ -122,9 +122,9 @@
     </div>
 
     <!-- MODAL KONFIRMASI STATUS PENGIRIMAN -->
-    <div x-show="statusModalOpen" x-cloak class="fixed inset-0 z-50 overflow-y-auto bg-black/40 backdrop-blur-xs flex items-center justify-center p-4">
-        <div @click.away="statusModalOpen = false" class="neo-card bg-cream-100 max-w-md w-full p-6 space-y-4 shadow-neo-lg rounded-2xl border border-cream-300">
-            <div class="flex items-center justify-between border-b border-cream-300/80 pb-3">
+    <div x-show="statusModalOpen" x-cloak class="fixed inset-0 z-50 overflow-y-auto bg-slate-900/40 backdrop-blur-md flex items-center justify-center p-4">
+        <div @click.away="statusModalOpen = false" class="glass-card bg-white/95 max-w-md w-full p-6 space-y-4 shadow-glass-lg rounded-2xl border border-white/80">
+            <div class="flex items-center justify-between border-b border-slate-200/80 pb-3">
                 <h3 class="text-sm font-bold text-cream-900">Konfirmasi Status Pengiriman</h3>
                 <button @click="statusModalOpen = false" class="neo-btn p-1.5 text-cream-500 hover:text-cream-900">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>

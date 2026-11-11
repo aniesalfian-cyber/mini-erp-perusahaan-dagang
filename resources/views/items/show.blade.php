@@ -139,9 +139,9 @@
 
     <!-- MODAL PENYESUAIAN STOK OPNAME (ADMIN ONLY) -->
     @if(Auth::user()->isAdmin())
-        <div x-show="adjustModalOpen" x-cloak class="fixed inset-0 z-50 overflow-y-auto bg-black/40 backdrop-blur-xs flex items-center justify-center p-4">
-            <div @click.away="adjustModalOpen = false" class="neo-card bg-cream-100 max-w-md w-full p-6 space-y-4 shadow-neo-lg rounded-2xl border border-cream-300">
-                <div class="flex items-center justify-between border-b border-cream-300/80 pb-3">
+        <div x-show="adjustModalOpen" x-cloak class="fixed inset-0 z-50 overflow-y-auto bg-slate-900/40 backdrop-blur-md flex items-center justify-center p-4">
+            <div @click.away="adjustModalOpen = false" class="glass-card bg-white/95 max-w-md w-full p-6 space-y-4 shadow-glass-lg rounded-2xl border border-white/80">
+                <div class="flex items-center justify-between border-b border-slate-200/80 pb-3">
                     <div>
                         <h3 class="text-sm font-bold text-cream-900">Penyesuaian Stok Opname</h3>
                         <p class="text-[11px] text-cream-500 font-mono">{{ $item->code }} - {{ $item->name }}</p>

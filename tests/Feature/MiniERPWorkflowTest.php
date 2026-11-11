@@ -32,6 +32,8 @@ class MiniERPWorkflowTest extends TestCase
     {
         parent::setUp();
 
+        $this->withoutMiddleware(\Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class);
+
         $this->admin = User::where('email', 'admin@primajaya.com')->firstOrFail();
         $this->marketing = User::where('email', 'marketing@primajaya.com')->firstOrFail();
         $this->logistik = User::where('email', 'logistik@primajaya.com')->firstOrFail();
