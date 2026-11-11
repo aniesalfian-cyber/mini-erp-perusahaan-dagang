@@ -1,9 +1,12 @@
-const CACHE_NAME = 'primajaya-erp-v1';
+const CACHE_NAME = 'primajaya-erp-v2';
+const OFFLINE_URL = '/offline.html';
 const STATIC_ASSETS = [
     '/',
     '/login',
+    '/offline.html',
     '/manifest.json',
-    '/favicon.ico',
+    '/icons/icon-192.png',
+    '/icons/icon-512.png',
 ];
 
 self.addEventListener('install', (event) => {
@@ -31,31 +34,51 @@ self.addEventListener('fetch', (event) => {
         return;
     }
 
-    event.respondWith(
-        fetch(event.request)
-            .then((networkResponse) => {
-                if (networkResponse && networkResponse.status === 200) {
-                    const responseClone = networkResponse.clone();
-                    caches.open(CACHE_NAME).then((cache) => {
-                        cache.put(event.request, responseClone);
-                    });
-                }
-                return networkResponse;
-            })
-            .catch(() => {
-                return caches.match(event.request).then((cachedResponse) => {
+    // Handle HTML Navigation requests
+    if (event.request.mode === 'navigate') {
+        event.respondWith(
+            fetch(event.request)
+                .then((networkResponse) => {
+                    if (networkResponse && networkResponse.status === 200) {
+                        const copy = networkResponse.clone();
+                        caches.open(CACHE_NAME).then((cache) => {
+                            cache.put(event.request, copy);
+                        });
+                    }
+                    return networkResponse;
+                })
+                .catch(async () => {
+                    const cachedResponse = await caches.match(event.request);
                     if (cachedResponse) {
                         return cachedResponse;
                     }
-                    if (event.request.headers.get('accept').includes('text/html')) {
-                        return caches.match('/login');
+                    return caches.match(OFFLINE_URL);
+                })
+        );
+        return;
+    }
+
+    // Handle Static Assets (CSS, JS, Fonts, Images)
+    event.respondWith(
+        caches.match(event.request).then((cachedResponse) => {
+            const fetchPromise = fetch(event.request)
+                .then((networkResponse) => {
+                    if (networkResponse && networkResponse.status === 200) {
+                        const copy = networkResponse.clone();
+                        caches.open(CACHE_NAME).then((cache) => {
+                            cache.put(event.request, copy);
+                        });
                     }
-                });
-            })
+                    return networkResponse;
+                })
+                .catch(() => cachedResponse);
+
+            return cachedResponse || fetchPromise;
+        })
     );
 });
 
-// Background Sync for offline task queues
+// Background Sync listener for offline queue
 self.addEventListener('sync', (event) => {
     if (event.tag === 'sync-erp-tasks') {
         event.waitUntil(processOfflineQueue());

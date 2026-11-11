@@ -1,11 +1,18 @@
 {
     "name": "ERP System Prima Jaya",
-    "short_name": "ERP PrimaJaya",
-    "description": "Sistem ERP Perusahaan Dagang & Distribusi Bahan Bangunan",
+    "short_name": "PrimaJaya ERP",
+    "description": "Sistem ERP Terpadu Perusahaan Dagang dan Distribusi Bahan Bangunan",
     "start_url": "/dashboard",
+    "scope": "/",
     "display": "standalone",
-    "background_color": "#EAE6DF",
+    "orientation": "any",
+    "background_color": "#F8FAFC",
     "theme_color": "#1E3A2B",
+    "categories": [
+        "business",
+        "productivity",
+        "utilities"
+    ],
     "icons": [
         {
             "src": "/icons/icon-192.png",
@@ -18,6 +25,36 @@
             "sizes": "512x512",
             "type": "image/png",
             "purpose": "any maskable"
+        }
+    ],
+    "shortcuts": [
+        {
+            "name": "Penjualan (Sales Order)",
+            "short_name": "SO",
+            "description": "Buka modul pesanan penjualan material",
+            "url": "/sales-orders",
+            "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
+        },
+        {
+            "name": "Surat Jalan (DO)",
+            "short_name": "DO",
+            "description": "Buka modul logistik dan pengiriman armada",
+            "url": "/delivery-orders",
+            "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
+        },
+        {
+            "name": "Master Barang",
+            "short_name": "Barang",
+            "description": "Cek stok fisik dan katalog bahan bangunan",
+            "url": "/items",
+            "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
+        },
+        {
+            "name": "Faktur Penjualan",
+            "short_name": "Invoice",
+            "description": "Kelola penagihan piutang dan pembayaran",
+            "url": "/invoices",
+            "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
         }
     ]
 }

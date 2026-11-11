@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mode Offline | ERP System Prima Jaya</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #F8FAFC 0%, #EDF2F7 100%);
+            color: #0F172A;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+        }
+        .card {
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.95);
+            border-radius: 1.5rem;
+            padding: 2.5rem 2rem;
+            max-width: 440px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.12);
+        }
+        .badge {
+            width: 4rem;
+            height: 4rem;
+            margin: 0 auto 1.25rem;
+            border-radius: 1.25rem;
+            background: #1E3A2B;
+            color: #FFFFFF;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-bold: 700;
+            box-shadow: 0 10px 20px -5px rgba(30, 58, 43, 0.3);
+        }
+        h1 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #0F172A;
+            margin-bottom: 0.5rem;
+        }
+        p {
+            font-size: 0.85rem;
+            color: #64748B;
+            line-height: 1.5;
+            margin-bottom: 1.5rem;
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 1.75rem;
+            background: #1E3A2B;
+            color: #FFFFFF;
+            font-size: 0.85rem;
+            font-weight: 600;
+            border-radius: 0.875rem;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(30, 58, 43, 0.2);
+        }
+        .btn:hover {
+            background: #162B20;
+            transform: translateY(-1px);
+        }
+        .meta {
+            margin-top: 1.5rem;
+            font-size: 0.75rem;
+            font-family: 'JetBrains Mono', monospace;
+            color: #94A3B8;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="badge">PJ</div>
+        <h1>Koneksi Terputus</h1>
+        <p>
+            Perangkat Anda saat ini berada di luar jangkauan jaringan internet. Aplikasi ERP Prima Jaya tetap menyimpan data tugas lokal Anda dan akan menyelaraskannya secara otomatis saat tersambung kembali.
+        </p>
+        <button class="btn" onclick="window.location.reload()">
+            Coba Sambungkan Kembali
+        </button>
+        <div class="meta">
+            PWA Offline Protection | PT Prima Jaya Material
+        </div>
+    </div>
+</body>
+</html>

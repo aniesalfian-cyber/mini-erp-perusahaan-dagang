@@ -139,6 +139,44 @@
 
         </div>
 
+        <!-- PWA Installation Card (Login View) -->
+        <div x-data="pwaInstaller()" x-cloak x-show="canInstall" class="glass-card p-4 border border-white/90 bg-white/80 shadow-glass-sm flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
+            <div class="flex items-center space-x-3 text-left">
+                <div class="w-10 h-10 rounded-xl bg-forest-800 text-white font-mono font-bold flex items-center justify-center shrink-0 shadow-sm">
+                    PJ
+                </div>
+                <div>
+                    <h4 class="font-bold text-cream-900 text-xs">Gunakan Aplikasi ERP Prima Jaya</h4>
+                    <p class="text-[11px] text-cream-600">Pasang langsung ke ponsel atau komputer tanpa App Store / Play Store.</p>
+                </div>
+            </div>
+
+            <button @click="installApp()" type="button" class="glass-btn-primary w-full sm:w-auto px-4 py-2 font-semibold flex items-center justify-center space-x-2 rounded-xl shadow-sm hover:scale-105 active:scale-95 transition-all">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                </svg>
+                <span>Install Aplikasi Sekarang</span>
+            </button>
+
+            <!-- iOS Safari Installation Guide Modal -->
+            <div x-show="showIOSGuide" x-cloak class="fixed inset-0 z-50 overflow-y-auto bg-slate-900/40 backdrop-blur-md flex items-center justify-center p-4">
+                <div @click.away="showIOSGuide = false" class="glass-card bg-white/95 max-w-sm w-full p-6 space-y-4 shadow-glass-lg rounded-3xl border border-white/90 text-center text-xs">
+                    <div class="w-12 h-12 rounded-2xl bg-forest-800 text-white font-mono font-bold text-lg flex items-center justify-center mx-auto shadow-md">
+                        PJ
+                    </div>
+                    <h3 class="text-sm font-bold text-cream-900">Pasang ERP Prima Jaya di iPhone/iPad</h3>
+                    <p class="text-cream-600 leading-relaxed text-left space-y-1">
+                        1. Ketuk tombol <b>Bagikan (Share)</b> pada bilah Safari.<br>
+                        2. Gulir lalu pilih <b>"Tambahkan ke Layar Utama" (Add to Home Screen)</b>.<br>
+                        3. Ketuk <b>Tambah</b> di pojok kanan atas.
+                    </p>
+                    <button @click="showIOSGuide = false" type="button" class="glass-btn-primary w-full py-2.5 font-semibold text-xs rounded-xl">
+                        Mengerti
+                    </button>
+                </div>
+            </div>
+        </div>
+
         <!-- Footer Note -->
         <p class="text-center text-[11px] text-cream-500 font-mono">
             &copy; {{ date('Y') }} ERP System Prima Jaya. Luxury White Glassmorphism Edition.

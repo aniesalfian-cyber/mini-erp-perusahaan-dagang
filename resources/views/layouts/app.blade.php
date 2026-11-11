@@ -8,7 +8,11 @@
 
     <!-- PWA Settings -->
     <link rel="manifest" href="/manifest.json">
-    <meta name="theme-color" content="#FFFFFF">
+    <meta name="theme-color" content="#1E3A2B">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="PrimaJaya ERP">
     <link rel="apple-touch-icon" href="/icons/icon-192.png">
 
     <!-- Fonts & Icons -->
@@ -66,10 +70,41 @@
                     </a>
                 </nav>
 
-                <!-- User Profile & Quick Role Switcher -->
-                <div class="flex items-center space-x-3" x-data="{ roleMenuOpen: false }">
+                <!-- User Profile, PWA Install & Quick Role Switcher -->
+                <div class="flex items-center space-x-2.5">
+                    <!-- PWA Install Button (Header) -->
+                    <div x-data="pwaInstaller()" x-cloak x-show="canInstall" class="inline-flex">
+                        <button @click="installApp()" type="button"
+                                class="glass-btn px-2.5 sm:px-3 py-1.5 text-xs font-semibold text-emerald-800 bg-emerald-50/90 hover:bg-emerald-100/90 border border-emerald-300/80 rounded-xl flex items-center space-x-1.5 shadow-sm transition-all hover:scale-105 active:scale-95"
+                                title="Pasang aplikasi ERP Prima Jaya ke perangkat Anda">
+                            <svg class="w-4 h-4 text-emerald-700 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                            </svg>
+                            <span class="hidden sm:inline">Install App</span>
+                            <span class="sm:hidden font-mono text-[11px]">Install</span>
+                        </button>
+
+                        <!-- iOS Safari Installation Guide Modal -->
+                        <div x-show="showIOSGuide" x-cloak class="fixed inset-0 z-50 overflow-y-auto bg-slate-900/40 backdrop-blur-md flex items-center justify-center p-4">
+                            <div @click.away="showIOSGuide = false" class="glass-card bg-white/95 max-w-sm w-full p-6 space-y-4 shadow-glass-lg rounded-3xl border border-white/90 text-center text-xs">
+                                <div class="w-12 h-12 rounded-2xl bg-forest-800 text-white font-mono font-bold text-lg flex items-center justify-center mx-auto shadow-md">
+                                    PJ
+                                </div>
+                                <h3 class="text-sm font-bold text-cream-900">Pasang ERP Prima Jaya di iPhone/iPad</h3>
+                                <p class="text-cream-600 leading-relaxed text-left space-y-1">
+                                    1. Ketuk tombol <b>Bagikan (Share)</b> pada bilah Safari.<br>
+                                    2. Gulir lalu pilih <b>"Tambahkan ke Layar Utama" (Add to Home Screen)</b>.<br>
+                                    3. Ketuk <b>Tambah</b> di pojok kanan atas.
+                                </p>
+                                <button @click="showIOSGuide = false" type="button" class="glass-btn-primary w-full py-2.5 font-semibold text-xs rounded-xl">
+                                    Mengerti
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Quick Switch Role Dropdown -->
-                    <div class="relative">
+                    <div class="relative" x-data="{ roleMenuOpen: false }">
                         <button @click="roleMenuOpen = !roleMenuOpen" type="button" class="glass-btn px-3 py-1.5 text-xs text-cream-800 flex items-center space-x-1.5 rounded-xl hover:border-forest/40">
                             <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
                             <span class="font-medium hidden sm:inline">{{ Auth::user()->role->name ?? 'User' }}</span>
@@ -160,6 +195,28 @@
     <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-5">
         @yield('content')
     </main>
+
+    <!-- Mobile Floating PWA Install Banner -->
+    <div x-data="pwaInstaller()" x-cloak x-show="canInstall && !dismissed" 
+         class="md:hidden fixed bottom-20 left-4 right-4 z-40 glass-card bg-white/95 p-3.5 border border-white/90 shadow-glass-lg rounded-2xl flex items-center justify-between gap-3">
+        <div class="flex items-center space-x-2.5">
+            <div class="w-9 h-9 rounded-xl bg-forest-800 text-white font-mono font-bold text-sm flex items-center justify-center shrink-0 shadow-sm">
+                PJ
+            </div>
+            <div>
+                <h4 class="text-xs font-bold text-cream-900 leading-tight">Pasang ERP Prima Jaya</h4>
+                <p class="text-[10px] text-cream-600">Akses instan satu-ketuk & mode offline di HP Anda.</p>
+            </div>
+        </div>
+        <div class="flex items-center space-x-1.5 shrink-0">
+            <button @click="installApp()" type="button" class="glass-btn-primary px-3 py-1.5 text-xs font-semibold rounded-xl shadow-sm">
+                Install
+            </button>
+            <button @click="dismissBanner()" type="button" class="glass-btn p-1.5 text-cream-400 hover:text-cream-700 rounded-xl" title="Tutup">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+        </div>
+    </div>
 
     <!-- Mobile Bottom Navigation (Luxury Frosted White Glass) -->
     <nav class="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/80 backdrop-blur-xl border-t border-white/90 shadow-glass-lg px-2 py-2">
