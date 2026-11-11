@@ -57,6 +57,7 @@ Route::middleware(['auth'])->group(function () {
     // Modul Siklus Penjualan (Marketing & Admin)
     Route::get('/sales-orders', [SalesOrderController::class, 'index'])->name('sales-orders.index');
     Route::get('/sales-orders/{salesOrder}', [SalesOrderController::class, 'show'])->name('sales-orders.show');
+    Route::get('/sales-orders/{salesOrder}/print', [SalesOrderController::class, 'print'])->name('sales-orders.print');
     Route::middleware(['role:ADMIN|MARKETING'])->group(function () {
         Route::post('/sales-orders', [SalesOrderController::class, 'store'])->name('sales-orders.store');
         Route::post('/sales-orders/{salesOrder}/cancel', [SalesOrderController::class, 'cancel'])->name('sales-orders.cancel');
@@ -69,6 +70,7 @@ Route::middleware(['auth'])->group(function () {
     // Modul Gudang & Surat Jalan (Logistik & Admin)
     Route::get('/delivery-orders', [DeliveryOrderController::class, 'index'])->name('delivery-orders.index');
     Route::get('/delivery-orders/{deliveryOrder}', [DeliveryOrderController::class, 'show'])->name('delivery-orders.show');
+    Route::get('/delivery-orders/{deliveryOrder}/print', [DeliveryOrderController::class, 'print'])->name('delivery-orders.print');
     Route::middleware(['role:ADMIN|LOGISTIK'])->group(function () {
         Route::post('/delivery-orders', [DeliveryOrderController::class, 'store'])->name('delivery-orders.store');
         Route::post('/delivery-orders/{deliveryOrder}/status', [DeliveryOrderController::class, 'updateStatus'])->name('delivery-orders.status');
@@ -77,6 +79,7 @@ Route::middleware(['auth'])->group(function () {
     // Modul Siklus Pengadaan (Purchasing & Admin)
     Route::get('/purchase-orders', [PurchaseOrderController::class, 'index'])->name('purchase-orders.index');
     Route::get('/purchase-orders/{purchaseOrder}', [PurchaseOrderController::class, 'show'])->name('purchase-orders.show');
+    Route::get('/purchase-orders/{purchaseOrder}/print', [PurchaseOrderController::class, 'print'])->name('purchase-orders.print');
     Route::middleware(['role:ADMIN|PURCHASING'])->group(function () {
         Route::post('/purchase-orders', [PurchaseOrderController::class, 'store'])->name('purchase-orders.store');
     });
@@ -84,6 +87,7 @@ Route::middleware(['auth'])->group(function () {
     // Modul Penerimaan Barang / GRN (Logistik & Admin)
     Route::get('/goods-receipts', [GoodsReceiptController::class, 'index'])->name('goods-receipts.index');
     Route::get('/goods-receipts/{goodsReceipt}', [GoodsReceiptController::class, 'show'])->name('goods-receipts.show');
+    Route::get('/goods-receipts/{goodsReceipt}/print', [GoodsReceiptController::class, 'print'])->name('goods-receipts.print');
     Route::middleware(['role:ADMIN|LOGISTIK'])->group(function () {
         Route::post('/goods-receipts', [GoodsReceiptController::class, 'store'])->name('goods-receipts.store');
     });
@@ -92,6 +96,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/invoices', [SalesInvoiceController::class, 'index'])->name('invoices.index');
     Route::get('/invoices/{invoice}', [SalesInvoiceController::class, 'show'])->name('invoices.show');
     Route::get('/invoices/{invoice}/pdf', [SalesInvoiceController::class, 'pdf'])->name('invoices.pdf');
+    Route::get('/invoices/{invoice}/print', [SalesInvoiceController::class, 'print'])->name('invoices.print');
     Route::middleware(['role:ADMIN|ACCOUNTING'])->group(function () {
         Route::post('/invoices/from-do', [SalesInvoiceController::class, 'createFromDO'])->name('invoices.create-from-do');
         Route::post('/invoices/{invoice}/payment', [SalesInvoiceController::class, 'recordPayment'])->name('invoices.payment');

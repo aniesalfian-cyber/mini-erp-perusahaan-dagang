@@ -123,4 +123,10 @@ class PurchaseOrderController extends Controller
         $purchaseOrder->load(['supplier', 'purchasingUser', 'items.item.stockBalance', 'goodsReceipts.items.item']);
         return view('purchase_orders.show', compact('purchaseOrder'));
     }
+
+    public function print(PurchaseOrder $purchaseOrder): View
+    {
+        $purchaseOrder->load(['supplier', 'purchasingUser', 'items.item']);
+        return view('purchase_orders.print', compact('purchaseOrder'));
+    }
 }

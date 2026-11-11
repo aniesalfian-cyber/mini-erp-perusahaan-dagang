@@ -78,9 +78,10 @@
         </form>
     </div>
 
-    <!-- GRN Table -->
+    <!-- GRN Table (Desktop) & Cards (Mobile) -->
     <div class="neo-card overflow-hidden">
-        <div class="overflow-x-auto">
+        <!-- Desktop Table View -->
+        <div class="hidden md:block overflow-x-auto">
             <table class="w-full text-left text-xs">
                 <thead>
                     <tr class="border-b border-cream-300 bg-cream-100/60 font-mono text-cream-600 uppercase text-[11px]">
@@ -125,9 +126,14 @@
                                 </span>
                             </td>
                             <td class="py-3 px-4 text-center whitespace-nowrap">
-                                <a href="{{ route('goods-receipts.show', $grn->id) }}" class="neo-btn px-2.5 py-1 text-xs text-forest hover:border-forest/50 font-medium">
-                                    Rincian &rarr;
-                                </a>
+                                <div class="flex items-center justify-center space-x-1.5">
+                                    <a href="{{ route('goods-receipts.print', $grn->id) }}" target="_blank" class="neo-btn p-1.5 text-slate-700 hover:text-forest" title="Cetak Nota Penerimaan">
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+                                    </a>
+                                    <a href="{{ route('goods-receipts.show', $grn->id) }}" class="neo-btn px-2.5 py-1 text-xs text-forest hover:border-forest/50 font-medium">
+                                        Rincian &rarr;
+                                    </a>
+                                </div>
                             </td>
                         </tr>
                     @empty
@@ -139,6 +145,56 @@
                     @endforelse
                 </tbody>
             </table>
+        </div>
+
+        <!-- Mobile Card View (Minimalist) -->
+        <div class="block md:hidden divide-y divide-cream-300/60 font-sans">
+            @forelse ($goodsReceipts as $grn)
+                <div class="p-4 space-y-3 hover:bg-white/60 transition-colors">
+                    <div class="flex items-start justify-between gap-2">
+                        <div>
+                            <div class="flex items-center space-x-2">
+                                <span class="font-mono text-xs font-bold text-cream-900">{{ $grn->grn_no }}</span>
+                                <span class="text-[10px] text-cream-500 font-mono">{{ $grn->receipt_date->format('d/m/Y') }}</span>
+                            </div>
+                            <h3 class="text-sm font-semibold text-cream-900 leading-snug mt-0.5">{{ $grn->supplier->name }}</h3>
+                        </div>
+                        <span class="px-2 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-emerald-100 text-emerald-800">
+                            {{ $grn->status }}
+                        </span>
+                    </div>
+
+                    <div class="text-xs text-cream-700 space-y-1 bg-slate-50/80 p-2.5 rounded-xl border border-slate-100 font-mono">
+                        <div class="flex items-center justify-between">
+                            <span class="text-cream-500 font-sans">PO Asal:</span>
+                            <span class="font-semibold text-cream-900">{{ $grn->purchaseOrder->po_no ?? '-' }}</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-cream-500 font-sans">No. SJ Supplier:</span>
+                            <span class="text-cream-900">{{ $grn->supplier_do_no ?? '-' }}</span>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between pt-1 text-xs">
+                        <span class="text-[11px] text-cream-500 truncate max-w-[150px]">
+                            Gudang: {{ $grn->logisticsUser->name ?? 'Staf' }}
+                        </span>
+                        <div class="flex items-center space-x-2">
+                            <a href="{{ route('goods-receipts.print', $grn->id) }}" target="_blank" class="neo-btn px-2.5 py-1.5 text-xs text-slate-700 flex items-center space-x-1 rounded-lg">
+                                <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+                                <span>Cetak</span>
+                            </a>
+                            <a href="{{ route('goods-receipts.show', $grn->id) }}" class="neo-btn px-3 py-1.5 text-xs font-medium text-forest rounded-lg">
+                                Rincian &rarr;
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            @empty
+                <div class="p-8 text-center text-cream-500 text-xs">
+                    Belum ada Nota Penerimaan Barang yang dicatat.
+                </div>
+            @endforelse
         </div>
 
         <div class="p-4 border-t border-cream-300">

@@ -37,9 +37,10 @@
         </form>
     </div>
 
-    <!-- Suppliers Table -->
+    <!-- Suppliers Table (Desktop) & Cards (Mobile) -->
     <div class="neo-card overflow-hidden">
-        <div class="overflow-x-auto">
+        <!-- Desktop Table View -->
+        <div class="hidden md:block overflow-x-auto">
             <table class="w-full text-left text-xs">
                 <thead>
                     <tr class="border-b border-cream-300 bg-cream-100/60 font-mono text-cream-600 uppercase text-[11px]">
@@ -86,6 +87,47 @@
                     @endforelse
                 </tbody>
             </table>
+        </div>
+
+        <!-- Mobile Card View (Minimalist) -->
+        <div class="block md:hidden divide-y divide-cream-300/60 font-sans">
+            @forelse ($suppliers as $s)
+                <div class="p-4 space-y-2.5 hover:bg-white/60 transition-colors">
+                    <div class="flex items-start justify-between gap-2">
+                        <div>
+                            <span class="font-mono text-xs font-bold text-cream-900 block">{{ $s->code }}</span>
+                            <h3 class="text-sm font-semibold text-cream-900 leading-snug">{{ $s->name }}</h3>
+                        </div>
+                        <span class="px-2 py-0.5 rounded text-[10px] bg-slate-100 text-slate-700 font-mono font-medium">
+                            Pemasok
+                        </span>
+                    </div>
+
+                    <div class="text-xs text-cream-700 space-y-1 bg-slate-50/80 p-2.5 rounded-xl border border-slate-100 font-mono">
+                        <div class="flex items-center justify-between">
+                            <span class="text-cream-500 font-sans">Kontak PIC:</span>
+                            <span class="font-medium text-cream-900 font-sans">{{ $s->contact_person ?? 'Bagian Penjualan' }}</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-cream-500 font-sans">Telepon:</span>
+                            <span class="font-medium text-cream-900">{{ $s->phone ?? 'Tidak ada telp' }}</span>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between pt-1 text-xs">
+                        <span class="text-[11px] text-cream-500 truncate max-w-[170px]" title="{{ $s->address }}">
+                            {{ $s->address ?? 'Alamat pabrik utama' }}
+                        </span>
+                        <a href="{{ route('suppliers.show', $s->id) }}" class="neo-btn px-3 py-1.5 text-xs font-medium text-forest rounded-lg">
+                            Riwayat &rarr;
+                        </a>
+                    </div>
+                </div>
+            @empty
+                <div class="p-8 text-center text-cream-500 text-xs">
+                    Belum ada pemasok yang terdaftar.
+                </div>
+            @endforelse
         </div>
 
         <div class="p-4 border-t border-cream-300">

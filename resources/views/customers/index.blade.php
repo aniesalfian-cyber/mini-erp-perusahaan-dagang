@@ -37,9 +37,10 @@
         </form>
     </div>
 
-    <!-- Customers Table -->
+    <!-- Customers Table (Desktop) & Cards (Mobile) -->
     <div class="neo-card overflow-hidden">
-        <div class="overflow-x-auto">
+        <!-- Desktop Table View -->
+        <div class="hidden md:block overflow-x-auto">
             <table class="w-full text-left text-xs">
                 <thead>
                     <tr class="border-b border-cream-300 bg-cream-100/60 font-mono text-cream-600 uppercase text-[11px]">
@@ -97,6 +98,54 @@
                     @endforelse
                 </tbody>
             </table>
+        </div>
+
+        <!-- Mobile Card View (Minimalist) -->
+        <div class="block md:hidden divide-y divide-cream-300/60 font-sans">
+            @forelse ($customers as $c)
+                @php
+                    $avail = max(0, (float)$c->credit_limit - (float)$c->current_credit);
+                @endphp
+                <div class="p-4 space-y-3 hover:bg-white/60 transition-colors">
+                    <div class="flex items-start justify-between gap-2">
+                        <div>
+                            <span class="font-mono text-xs font-bold text-cream-900 block">{{ $c->code }}</span>
+                            <h3 class="text-sm font-semibold text-cream-900 leading-snug">{{ $c->name }}</h3>
+                        </div>
+                        <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold {{ $avail > 0 ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800' }}">
+                            {{ $avail > 0 ? 'Kredit Aktif' : 'Limit Penuh' }}
+                        </span>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-2 p-2.5 rounded-xl bg-slate-50/80 border border-slate-100 text-center font-mono text-xs">
+                        <div>
+                            <span class="text-[10px] text-cream-500 block font-sans">Plafon</span>
+                            <span class="font-semibold text-cream-800 text-[11px]">Rp {{ number_format($c->credit_limit / 1000000, 0) }}jt</span>
+                        </div>
+                        <div>
+                            <span class="text-[10px] text-cream-500 block font-sans">Piutang</span>
+                            <span class="font-semibold text-purple-900 text-[11px]">Rp {{ number_format($c->current_credit / 1000000, 1) }}jt</span>
+                        </div>
+                        <div>
+                            <span class="text-[10px] text-cream-500 block font-sans">Sisa Plafon</span>
+                            <span class="font-bold {{ $avail > 0 ? 'text-emerald-700' : 'text-rose-700' }} text-[11px]">Rp {{ number_format($avail / 1000000, 1) }}jt</span>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between pt-1 text-xs">
+                        <span class="text-[11px] text-cream-500 truncate max-w-[170px] font-mono">
+                            {{ $c->phone ?? ($c->address ?? 'Tanpa kontak') }}
+                        </span>
+                        <a href="{{ route('customers.show', $c->id) }}" class="neo-btn px-3 py-1.5 text-xs font-medium text-forest rounded-lg">
+                            Riwayat &rarr;
+                        </a>
+                    </div>
+                </div>
+            @empty
+                <div class="p-8 text-center text-cream-500 text-xs">
+                    Belum ada pelanggan yang terdaftar.
+                </div>
+            @endforelse
         </div>
 
         <div class="p-4 border-t border-cream-300">

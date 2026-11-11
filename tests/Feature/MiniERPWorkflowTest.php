@@ -278,5 +278,51 @@ class MiniERPWorkflowTest extends TestCase
         $pdfResponse = $this->actingAs($this->accounting)->get("/invoices/{$invoice->id}/pdf");
         $pdfResponse->assertStatus(200);
         $this->assertEquals('application/pdf', $pdfResponse->headers->get('content-type'));
+
+        // Test browser print view
+        $printResponse = $this->actingAs($this->accounting)->get("/invoices/{$invoice->id}/print");
+        $printResponse->assertStatus(200);
+        $printResponse->assertSee('FAKTUR PENJUALAN (INVOICE)');
+        $printResponse->assertSee('PT Prima Jaya Material');
+    }
+
+    public function test_print_all_transactions(): void
+    {
+        $so = SalesOrder::first();
+        if (!$so) {
+            $this->test_sales_order_and_credit_check_flow();
+            $so = SalesOrder::firstOrFail();
+        }
+        $soPrint = $this->actingAs($this->marketing)->get("/sales-orders/{$so->id}/print");
+        $soPrint->assertStatus(200);
+        $soPrint->assertSee('SURAT PESANAN PENJUALAN (SO)');
+        $soPrint->assertSee('PT Prima Jaya Material');
+
+        $do = DeliveryOrder::first();
+        if (!$do) {
+            $this->test_delivery_order_and_partial_shipment();
+            $do = DeliveryOrder::firstOrFail();
+        }
+        $doPrint = $this->actingAs($this->logistik)->get("/delivery-orders/{$do->id}/print");
+        $doPrint->assertStatus(200);
+        $doPrint->assertSee('SURAT JALAN PENGIRIMAN (DO)');
+
+        $po = PurchaseOrder::first();
+        if (!$po) {
+            $this->test_purchase_order_and_goods_receipt_inspection();
+            $po = PurchaseOrder::firstOrFail();
+        }
+        $poPrint = $this->actingAs($this->purchasing)->get("/purchase-orders/{$po->id}/print");
+        $poPrint->assertStatus(200);
+        $poPrint->assertSee('SURAT PESANAN PEMBELIAN (PO)');
+
+        $grn = \App\Models\GoodsReceipt::first();
+        if (!$grn) {
+            $this->test_purchase_order_and_goods_receipt_inspection();
+            $grn = \App\Models\GoodsReceipt::firstOrFail();
+        }
+        $grnPrint = $this->actingAs($this->logistik)->get("/goods-receipts/{$grn->id}/print");
+        $grnPrint->assertStatus(200);
+        $grnPrint->assertSee('NOTA PENERIMAAN BARANG (GRN)');
     }
 }

@@ -88,9 +88,10 @@
         </form>
     </div>
 
-    <!-- Backorders Detail Table (Luxury White Glass) -->
+    <!-- Backorders Detail Table (Desktop) & Cards (Mobile) -->
     <div class="glass-card overflow-hidden border border-white/80 bg-white/80 shadow-glass">
-        <div class="overflow-x-auto">
+        <!-- Desktop Table View -->
+        <div class="hidden md:block overflow-x-auto">
             <table class="w-full text-left text-xs">
                 <thead>
                     <tr class="border-b border-slate-200/80 bg-slate-50/80 font-mono text-cream-600 uppercase text-[11px]">
@@ -180,6 +181,76 @@
                     @endforelse
                 </tbody>
             </table>
+        </div>
+
+        <!-- Mobile Card View (Minimalist) -->
+        <div class="block md:hidden divide-y divide-slate-100 font-sans">
+            @forelse ($backorders as $line)
+                @php
+                    $so = $line->salesOrder;
+                    $pendingQty = max(0, (float)$line->qty_ordered - (float)$line->qty_shipped);
+                    $pendingVal = $pendingQty * (float)$line->unit_price;
+                    $ageDays = Carbon\Carbon::now()->diffInDays($so->order_date);
+                    $stockOnHand = (float)($line->item->stockBalance->on_hand ?? 0);
+                    $stockEnough = $stockOnHand >= $pendingQty;
+                @endphp
+                <div class="p-4 space-y-3 hover:bg-white/60 transition-colors {{ $ageDays > 7 ? 'bg-amber-50/20' : '' }}">
+                    <div class="flex items-start justify-between gap-2">
+                        <div>
+                            <div class="flex items-center space-x-2">
+                                <span class="font-mono text-xs font-bold text-cream-900">{{ $so->order_no }}</span>
+                                <span class="text-[10px] font-mono {{ $ageDays > 5 ? 'text-amber-700 font-semibold' : 'text-cream-500' }}">
+                                    {{ $ageDays }} hari lalu
+                                </span>
+                            </div>
+                            <h3 class="text-sm font-semibold text-cream-900 leading-snug mt-0.5">{{ $so->customer->name }}</h3>
+                        </div>
+                        <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold {{ $stockEnough ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800' }}">
+                            {{ $stockEnough ? 'Stok Siap Kirim' : 'Butuh Pengadaan' }}
+                        </span>
+                    </div>
+
+                    <div class="p-2.5 rounded-xl bg-slate-50/80 border border-slate-100 space-y-2 text-xs">
+                        <div class="flex items-center justify-between">
+                            <span class="font-medium text-cream-900">{{ $line->item->name }}</span>
+                            <span class="font-mono text-cream-500 text-[10px]">{{ $line->item->code }}</span>
+                        </div>
+                        <div class="grid grid-cols-3 gap-2 text-center font-mono pt-1 border-t border-slate-200/60">
+                            <div>
+                                <span class="text-[10px] text-cream-500 font-sans block">Tertunda</span>
+                                <span class="font-bold text-terracotta text-xs">{{ number_format($pendingQty, 0, ',', '.') }} {{ $line->item->unit }}</span>
+                            </div>
+                            <div>
+                                <span class="text-[10px] text-cream-500 font-sans block">Stok Gudang</span>
+                                <span class="font-semibold {{ $stockEnough ? 'text-emerald-700' : 'text-rose-700' }} text-xs">{{ number_format($stockOnHand, 0, ',', '.') }}</span>
+                            </div>
+                            <div>
+                                <span class="text-[10px] text-cream-500 font-sans block">Nilai Tertahan</span>
+                                <span class="font-semibold text-cream-900 text-[11px]">Rp {{ number_format($pendingVal, 0, ',', '.') }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-end space-x-2 pt-1 text-xs">
+                        <a href="{{ route('sales-orders.show', $so->id) }}" class="glass-btn px-3 py-1.5 text-xs font-medium text-cream-700 rounded-lg">
+                            Lihat SO
+                        </a>
+                        @if(in_array(Auth::user()->role->code, ['ADMIN', 'LOGISTIK']) && $stockEnough)
+                            <a href="{{ route('delivery-orders.index') }}" class="glass-btn px-3.5 py-1.5 text-xs font-semibold text-forest bg-emerald-50/80 rounded-lg">
+                                Kirim DO Sekarang
+                            </a>
+                        @elseif(!$stockEnough)
+                            <a href="{{ route('purchase-orders.index') }}" class="glass-btn px-3.5 py-1.5 text-xs font-semibold text-rose-700 bg-rose-50/80 rounded-lg">
+                                Buat PO Supplier
+                            </a>
+                        @endif
+                    </div>
+                </div>
+            @empty
+                <div class="p-8 text-center text-emerald-700 text-xs font-sans">
+                    Luar biasa! Tidak ada antrean barang PO yang tertunda (Seluruh pesanan telah terpenuhi).
+                </div>
+            @endforelse
         </div>
 
         <div class="p-4 border-t border-slate-100">

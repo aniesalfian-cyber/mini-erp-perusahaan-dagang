@@ -94,6 +94,12 @@ class SalesInvoiceController extends Controller
         return $pdf->stream("Faktur_{$invoice->invoice_no}.pdf");
     }
 
+    public function print(SalesInvoice $invoice): View
+    {
+        $invoice->load(['customer', 'salesOrder', 'deliveryOrder', 'items.item', 'accountingUser', 'payments.accountingUser']);
+        return view('invoices.print', compact('invoice'));
+    }
+
     public function recordPayment(Request $request, SalesInvoice $invoice): RedirectResponse
     {
         $request->validate([

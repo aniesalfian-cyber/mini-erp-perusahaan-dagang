@@ -144,6 +144,12 @@ class SalesOrderController extends Controller
         return view('sales_orders.show', compact('salesOrder'));
     }
 
+    public function print(SalesOrder $salesOrder): View
+    {
+        $salesOrder->load(['customer', 'salesUser', 'items.item']);
+        return view('sales_orders.print', compact('salesOrder'));
+    }
+
     public function cancel(SalesOrder $salesOrder): RedirectResponse
     {
         if (in_array($salesOrder->status, ['COMPLETED', 'CANCELLED'])) {

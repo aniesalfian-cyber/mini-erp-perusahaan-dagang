@@ -181,6 +181,12 @@ class DeliveryOrderController extends Controller
         return view('delivery_orders.show', compact('deliveryOrder'));
     }
 
+    public function print(DeliveryOrder $deliveryOrder): View
+    {
+        $deliveryOrder->load(['customer', 'salesOrder', 'logisticsUser', 'items.item']);
+        return view('delivery_orders.print', compact('deliveryOrder'));
+    }
+
     public function updateStatus(Request $request, DeliveryOrder $deliveryOrder): RedirectResponse
     {
         $request->validate([

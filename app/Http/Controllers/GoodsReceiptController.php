@@ -190,4 +190,10 @@ class GoodsReceiptController extends Controller
         $goodsReceipt->load(['supplier', 'purchaseOrder', 'logisticsUser', 'items.item']);
         return view('goods_receipts.show', compact('goodsReceipt'));
     }
+
+    public function print(GoodsReceipt $goodsReceipt): View
+    {
+        $goodsReceipt->load(['supplier', 'purchaseOrder', 'logisticsUser', 'items.item']);
+        return view('goods_receipts.print', compact('goodsReceipt'));
+    }
 }

@@ -46,9 +46,10 @@
         </form>
     </div>
 
-    <!-- Invoices Table -->
+    <!-- Invoices Table (Desktop) & Cards (Mobile) -->
     <div class="neo-card overflow-hidden">
-        <div class="overflow-x-auto">
+        <!-- Desktop Table View -->
+        <div class="hidden md:block overflow-x-auto">
             <table class="w-full text-left text-xs">
                 <thead>
                     <tr class="border-b border-cream-300 bg-cream-100/60 font-mono text-cream-600 uppercase text-[11px]">
@@ -106,11 +107,13 @@
                                 </span>
                             </td>
                             <td class="py-3 px-4 text-center whitespace-nowrap">
-                                <div class="flex items-center justify-center space-x-1.5">
-                                    <a href="{{ route('invoices.pdf', $inv->id) }}" target="_blank" class="neo-btn p-1.5 text-cream-700 hover:text-forest" title="Cetak / Unduh PDF">
+                                <div class="flex items-center justify-center space-x-1">
+                                    <a href="{{ route('invoices.print', $inv->id) }}" target="_blank" class="neo-btn p-1.5 text-cream-700 hover:text-forest" title="Cetak Format Browser">
                                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
                                     </a>
-
+                                    <a href="{{ route('invoices.pdf', $inv->id) }}" target="_blank" class="neo-btn p-1.5 text-cream-700 hover:text-forest" title="Unduh PDF">
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"/></svg>
+                                    </a>
                                     <a href="{{ route('invoices.show', $inv->id) }}" class="neo-btn px-2 py-1 text-xs text-forest hover:border-forest/50 font-sans font-medium">
                                         Kelola &rarr;
                                     </a>
@@ -126,6 +129,65 @@
                     @endforelse
                 </tbody>
             </table>
+        </div>
+
+        <!-- Mobile Card View (Minimalist) -->
+        <div class="block md:hidden divide-y divide-cream-300/60 font-sans">
+            @forelse ($invoices as $inv)
+                @php
+                    $rem = max(0, (float)$inv->total_amount - (float)$inv->paid_amount);
+                    $isOverdue = $rem > 0 && Carbon\Carbon::today()->gt($inv->due_date);
+                @endphp
+                <div class="p-4 space-y-3 hover:bg-white/60 transition-colors {{ $isOverdue ? 'bg-rose-50/20' : '' }}">
+                    <div class="flex items-start justify-between gap-2">
+                        <div>
+                            <div class="flex items-center space-x-2">
+                                <span class="font-mono text-xs font-bold text-cream-900">{{ $inv->invoice_no }}</span>
+                                <span class="text-[10px] text-cream-500 font-mono">{{ $inv->invoice_date->format('d/m/Y') }}</span>
+                            </div>
+                            <h3 class="text-sm font-semibold text-cream-900 leading-snug mt-0.5">{{ $inv->customer->name }}</h3>
+                        </div>
+                        <span class="px-2 py-0.5 rounded-full text-[10px] font-mono font-semibold whitespace-nowrap
+                            {{ $inv->payment_status === 'PAID' ? 'bg-emerald-100 text-emerald-800' : ($inv->payment_status === 'PARTIAL' ? 'bg-blue-100 text-blue-800' : 'bg-rose-100 text-rose-800') }}">
+                            {{ $inv->payment_status }}
+                        </span>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-2 p-2.5 rounded-xl bg-slate-50/80 border border-slate-100 text-center font-mono text-xs">
+                        <div>
+                            <span class="text-[10px] text-cream-500 font-sans block">Total</span>
+                            <span class="font-bold text-cream-900 text-xs">Rp {{ number_format($inv->total_amount / 1000000, 1) }}jt</span>
+                        </div>
+                        <div>
+                            <span class="text-[10px] text-cream-500 font-sans block">Dibayar</span>
+                            <span class="font-semibold text-emerald-800 text-xs">Rp {{ number_format($inv->paid_amount / 1000000, 1) }}jt</span>
+                        </div>
+                        <div>
+                            <span class="text-[10px] text-cream-500 font-sans block">Sisa Piutang</span>
+                            <span class="font-bold {{ $rem > 0 ? 'text-rose-700' : 'text-slate-400' }} text-xs">Rp {{ number_format($rem / 1000000, 1) }}jt</span>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between pt-1 text-xs">
+                        <span class="text-[11px] {{ $isOverdue ? 'text-rose-700 font-bold' : 'text-cream-500' }} font-mono">
+                            Jatuh tempo: {{ $inv->due_date->format('d/m/Y') }}
+                        </span>
+                        <div class="flex items-center space-x-1.5">
+                            <a href="{{ route('invoices.print', $inv->id) }}" target="_blank" class="neo-btn px-2 py-1 text-xs text-slate-700 flex items-center space-x-1 rounded-lg">
+                                <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+                                <span>Cetak</span>
+                            </a>
+                            <a href="{{ route('invoices.show', $inv->id) }}" class="neo-btn px-2.5 py-1 text-xs font-medium text-forest rounded-lg">
+                                Kelola &rarr;
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            @empty
+                <div class="p-8 text-center text-cream-500 text-xs font-sans">
+                    Belum ada Faktur Penjualan yang diterbitkan.
+                </div>
+            @endforelse
         </div>
 
         <div class="p-4 border-t border-cream-300">

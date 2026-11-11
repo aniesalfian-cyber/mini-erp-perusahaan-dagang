@@ -15,9 +15,10 @@
         </div>
     </div>
 
-    <!-- Logs Table -->
+    <!-- Logs Table (Desktop) & Cards (Mobile) -->
     <div class="neo-card overflow-hidden">
-        <div class="overflow-x-auto">
+        <!-- Desktop Table View -->
+        <div class="hidden md:block overflow-x-auto">
             <table class="w-full text-left text-xs">
                 <thead>
                     <tr class="border-b border-cream-300 bg-cream-100/60 font-mono text-cream-600 uppercase text-[11px]">
@@ -62,6 +63,33 @@
                     @endforelse
                 </tbody>
             </table>
+        </div>
+
+        <!-- Mobile Card View (Minimalist) -->
+        <div class="block md:hidden divide-y divide-cream-300/60 font-sans">
+            @forelse ($logs as $log)
+                <div class="p-3.5 space-y-2 hover:bg-white/60 transition-colors text-xs">
+                    <div class="flex items-center justify-between gap-2">
+                        <span class="font-semibold text-cream-900">{{ $log->user->name ?? 'Sistem' }}</span>
+                        <span class="px-2 py-0.5 rounded text-[10px] bg-slate-100 text-slate-700 font-mono font-semibold">
+                            {{ $log->action }}
+                        </span>
+                    </div>
+
+                    <div class="flex items-center justify-between text-cream-600 font-mono text-[11px]">
+                        <span>Tabel: <strong class="text-cream-800">{{ $log->table_name }}</strong> #{{ $log->record_id }}</span>
+                        <span class="text-cream-400">{{ $log->ip_address ?? '127.0.0.1' }}</span>
+                    </div>
+
+                    <div class="text-[10px] text-cream-500 font-mono pt-1 border-t border-slate-100">
+                        {{ $log->created_at->format('d/m/Y H:i:s') }} WIB
+                    </div>
+                </div>
+            @empty
+                <div class="p-8 text-center text-cream-500 font-sans text-xs">
+                    Belum ada catatan aktivitas log audit.
+                </div>
+            @endforelse
         </div>
 
         <div class="p-4 border-t border-cream-300">

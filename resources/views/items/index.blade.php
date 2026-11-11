@@ -50,9 +50,10 @@
         </form>
     </div>
 
-    <!-- Items Table (Luxury White Glass) -->
+    <!-- Items Table (Desktop) & Cards (Mobile) -->
     <div class="glass-card overflow-hidden border border-white/80 bg-white/80 shadow-glass">
-        <div class="overflow-x-auto">
+        <!-- Desktop Table View -->
+        <div class="hidden md:block overflow-x-auto">
             <table class="w-full text-left text-xs">
                 <thead>
                     <tr class="border-b border-slate-200/80 bg-slate-50/80 font-mono text-cream-600 uppercase text-[11px]">
@@ -131,6 +132,71 @@
                     @endforelse
                 </tbody>
             </table>
+        </div>
+
+        <!-- Mobile Card View (Minimalist) -->
+        <div class="block md:hidden divide-y divide-slate-100">
+            @forelse ($items as $item)
+                @php
+                    $bal = $item->stockBalance;
+                    $onHand = (float)($bal->on_hand ?? 0);
+                    $reserved = (float)($bal->reserved ?? 0);
+                    $available = (float)($bal->available ?? 0);
+                    $isLow = $available <= (float)$item->min_stock;
+                @endphp
+                <div class="p-4 space-y-3 hover:bg-white/60 transition-colors {{ $isLow ? 'bg-rose-50/20' : '' }}">
+                    <div class="flex items-start justify-between gap-2">
+                        <div class="space-y-0.5">
+                            <div class="flex items-center space-x-2">
+                                <span class="font-mono text-xs font-bold text-cream-900">{{ $item->code }}</span>
+                                <span class="px-2 py-0.5 rounded text-[10px] bg-slate-100 text-slate-700 font-mono">{{ $item->unit }}</span>
+                                @if($isLow)
+                                    <span class="px-1.5 py-0.5 rounded text-[9px] bg-rose-100 text-rose-800 font-bold font-mono">Stok Menipis</span>
+                                @endif
+                            </div>
+                            <h3 class="text-sm font-semibold text-cream-900 leading-snug">{{ $item->name }}</h3>
+                        </div>
+                        <div class="text-right whitespace-nowrap">
+                            <span class="text-[10px] text-cream-500 uppercase font-mono block">Harga Jual</span>
+                            <span class="text-sm font-mono font-bold text-forest">Rp {{ number_format($item->selling_price, 0, ',', '.') }}</span>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-2 p-2.5 rounded-xl bg-slate-50/80 border border-slate-100 text-center font-mono text-xs">
+                        <div>
+                            <span class="text-[10px] text-cream-500 block">Stok Fisik</span>
+                            <span class="font-semibold text-cream-800">{{ number_format($onHand, 0, ',', '.') }}</span>
+                        </div>
+                        <div>
+                            <span class="text-[10px] text-cream-500 block">Dipesan</span>
+                            <span class="font-semibold text-amber-700">{{ number_format($reserved, 0, ',', '.') }}</span>
+                        </div>
+                        <div>
+                            <span class="text-[10px] text-cream-500 block">Tersedia</span>
+                            <span class="font-bold {{ $isLow ? 'text-rose-700' : 'text-emerald-700' }}">{{ number_format($available, 0, ',', '.') }}</span>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between pt-1 text-xs">
+                        <span class="text-[11px] text-cream-500 truncate max-w-[150px]">{{ $item->notes ?? 'Tanpa catatan' }}</span>
+                        <div class="flex items-center space-x-2">
+                            <a href="{{ route('items.show', $item->id) }}" class="glass-btn px-3 py-1.5 text-xs font-medium text-forest rounded-lg">
+                                Riwayat &rarr;
+                            </a>
+                            @if(in_array(Auth::user()->role->code, ['ADMIN', 'PURCHASING']))
+                                <button @click="activeItem = {{ json_encode($item) }}; editModalOpen = true;" type="button"
+                                        class="glass-btn px-3 py-1.5 text-xs font-medium text-amber-700 rounded-lg">
+                                    Edit
+                                </button>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            @empty
+                <div class="p-8 text-center text-cream-500 text-xs">
+                    Tidak ada data barang yang sesuai dengan kriteria pencarian.
+                </div>
+            @endforelse
         </div>
 
         <!-- Pagination -->

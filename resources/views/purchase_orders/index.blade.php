@@ -75,9 +75,10 @@
         </form>
     </div>
 
-    <!-- PO Table (Luxury White Glass) -->
+    <!-- PO Table (Desktop) & Cards (Mobile) -->
     <div class="glass-card overflow-hidden border border-white/80 bg-white/80 shadow-glass">
-        <div class="overflow-x-auto">
+        <!-- Desktop Table View -->
+        <div class="hidden md:block overflow-x-auto">
             <table class="w-full text-left text-xs">
                 <thead>
                     <tr class="border-b border-slate-200/80 bg-slate-50/80 font-mono text-cream-600 uppercase text-[11px]">
@@ -121,9 +122,14 @@
                                 </span>
                             </td>
                             <td class="py-3 px-4 text-center whitespace-nowrap">
-                                <a href="{{ route('purchase-orders.show', $po->id) }}" class="glass-btn px-3 py-1 text-xs text-forest hover:border-forest/50 font-medium">
-                                    Rincian &rarr;
-                                </a>
+                                <div class="flex items-center justify-center space-x-1.5">
+                                    <a href="{{ route('purchase-orders.print', $po->id) }}" target="_blank" class="glass-btn p-1.5 text-slate-700 hover:text-forest" title="Cetak Purchase Order">
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+                                    </a>
+                                    <a href="{{ route('purchase-orders.show', $po->id) }}" class="glass-btn px-2.5 py-1 text-xs text-forest hover:border-forest/50 font-medium">
+                                        Rincian &rarr;
+                                    </a>
+                                </div>
                             </td>
                         </tr>
                     @empty
@@ -135,6 +141,59 @@
                     @endforelse
                 </tbody>
             </table>
+        </div>
+
+        <!-- Mobile Card View (Minimalist) -->
+        <div class="block md:hidden divide-y divide-slate-100 font-sans">
+            @forelse ($purchaseOrders as $po)
+                <div class="p-4 space-y-3 hover:bg-white/60 transition-colors">
+                    <div class="flex items-start justify-between gap-2">
+                        <div>
+                            <div class="flex items-center space-x-2">
+                                <span class="font-mono text-xs font-bold text-cream-900">{{ $po->po_no }}</span>
+                                <span class="text-[10px] text-cream-500 font-mono">{{ $po->po_date->format('d/m/Y') }}</span>
+                            </div>
+                            <h3 class="text-sm font-semibold text-cream-900 leading-snug mt-0.5">{{ $po->supplier->name }}</h3>
+                        </div>
+                        <span class="px-2 py-0.5 rounded-full text-[10px] font-mono font-semibold whitespace-nowrap
+                            {{ $po->status === 'COMPLETED' ? 'bg-emerald-100 text-emerald-800' : ($po->status === 'PARTIAL_RECEIVED' ? 'bg-amber-100 text-amber-800' : 'bg-blue-100 text-blue-800') }}">
+                            {{ $po->status }}
+                        </span>
+                    </div>
+
+                    <div class="flex items-center justify-between p-2.5 rounded-xl bg-slate-50/80 border border-slate-100 text-xs font-mono">
+                        <div>
+                            <span class="text-[10px] text-cream-500 font-sans block">Total Anggaran PO</span>
+                            <span class="font-bold text-cream-900 text-sm">Rp {{ number_format($po->total_amount, 0, ',', '.') }}</span>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-[10px] text-cream-500 font-sans block">Target Tiba</span>
+                            <span class="font-semibold text-cream-700">
+                                {{ $po->expected_date ? $po->expected_date->format('d/m/Y') : 'Reguler' }}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between pt-1 text-xs">
+                        <span class="text-[11px] text-cream-500 truncate max-w-[150px]">
+                            Purchasing: {{ $po->purchasingUser->name ?? 'Staf' }}
+                        </span>
+                        <div class="flex items-center space-x-2">
+                            <a href="{{ route('purchase-orders.print', $po->id) }}" target="_blank" class="glass-btn px-2.5 py-1.5 text-xs text-slate-700 flex items-center space-x-1 rounded-lg">
+                                <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+                                <span>Cetak</span>
+                            </a>
+                            <a href="{{ route('purchase-orders.show', $po->id) }}" class="glass-btn px-3 py-1.5 text-xs font-medium text-forest rounded-lg">
+                                Rincian &rarr;
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            @empty
+                <div class="p-8 text-center text-cream-500 text-xs">
+                    Belum ada Purchase Order yang diterbitkan.
+                </div>
+            @endforelse
         </div>
 
         <div class="p-4 border-t border-slate-100">
